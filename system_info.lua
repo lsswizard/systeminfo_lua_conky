@@ -1,5 +1,5 @@
 --[[Lss Conky]]--
-
+ package.path = package.path .. ';' .. os.getenv("HOME") .. '/.config/conky/system_info_lua/?.lua;'
 require "cairo"
 require "cairo_xlib"
 require 'imlib2'
