@@ -15,9 +15,9 @@ end
 
 local function get_vram_used()
     local total_vram = tonumber(cached_conky_parse("${execi 2 glxinfo | grep 'Dedicated'| awk '{print $4}'}")) or 0
-    local vram_used = tonumber(cached_conky_parse("${execi 2 glxinfo | grep 'dedicated'| awk '{print $6}'}")) or 0
+    local vram_free = tonumber(cached_conky_parse("${execi 2 glxinfo | grep 'dedicated'| awk '{print $6}'}")) or 0
 
-    return total_vram - vram_used
+    return total_vram - vram_free
 
 end
 -- Function to determine CPU temperature color based on thresholds
