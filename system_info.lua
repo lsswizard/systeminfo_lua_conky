@@ -13,6 +13,12 @@ local function exec_command(command)
     return result
 end
 
+
+local function get_vram_used()
+    local total_vram = tonumber(cached_conky_parse("${execi 2 glxinfo | grep 'Dedicated'| awk '{print $4}'}"))
+    local vram_used = tonumber(cached_conky_parse("${execi 2 glxinfo | grep 'dedicated'| awk '{print $6}'}"))
+    return total_vram - vram_used
+end
 -- Function to determine CPU temperature color based on thresholds
 local function cpu_temp()
     local temp = tonumber(exec_command("sensors | awk '/AMD TSI/ {print $5}' | cut -c 2-3"))
@@ -86,7 +92,7 @@ local function gather_info_sections(h_offset)
         gpu = {
             create_info_section(exec_command("glxinfo | awk '/Device/ {print $3,$4,$5}'"), font, 20, colors.green, 0, h_offset + 117, "center"),
             create_info_section("Vram:", font, font_size, title_color, 20, h_offset + 139),
-            create_info_section(exec_command("awk '/wlan0/ {print $2}' /proc/net/dev | numfmt --to=iec"), font, 16, info_color, 72, h_offset + 139),
+            create_info_section(tostring(get_vram_used()) .. " MB", font, 16, info_color, 72, h_offset + 139),
             create_info_section("Driver:", font, font_size, title_color, 0, h_offset + 139, right_align, 118),
             create_info_section(exec_command("glxinfo | grep 'OpenGL version' |cut -c52-62"), font, 16, info_color, 0, h_offset + 139, right_align, 20),
             create_info_section("Usage:", font, font_size, title_color, 20, h_offset + 159),
