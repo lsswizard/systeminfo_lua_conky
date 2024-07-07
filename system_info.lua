@@ -14,11 +14,8 @@ local function exec_command(command)
 end
 
 local function get_vram_used()
-    local total_vram = tonumber(cached_conky_parse("${execi 2 glxinfo | grep 'Dedicated'| awk '{print $4}'}")) or 0
-    local vram_free = tonumber(cached_conky_parse("${execi 2 glxinfo | grep 'dedicated'| awk '{print $6}'}")) or 0
-
-    return total_vram - vram_free
-
+    local vram_used = tonumber(exec_command("cat /sys/class/drm/card1/device/mem_info_vram_used")) or 0
+    return math.floor(vram_used / 1024^2)
 end
 -- Function to determine CPU temperature color based on thresholds
 local function cpu_temp()
